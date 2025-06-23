@@ -1,8 +1,8 @@
 "use client";
 
-import { useSession, signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import SignInPrompt from "@/components/SignInPrompt";
 
 interface Vote {
   id: number;
@@ -90,6 +90,22 @@ export default function MyVotes() {
     }
   };
 
+  // Group votes by place_id
+  const groupedVotes = votes.reduce<Record<string, { place_name: string; place_address: string; dog?: Vote; pet?: Vote }>>((acc, vote) => {
+    if (!acc[vote.place_id]) {
+      acc[vote.place_id] = {
+        place_name: vote.place_name,
+        place_address: vote.place_address,
+      };
+    }
+    if (vote.question_type === "dog") {
+      acc[vote.place_id].dog = vote;
+    } else if (vote.question_type === "pet") {
+      acc[vote.place_id].pet = vote;
+    }
+    return acc;
+  }, {});
+
   if (status === "loading") {
     return (
       <main className="flex min-h-screen flex-col items-center p-8">
@@ -101,17 +117,7 @@ export default function MyVotes() {
   if (!session) {
     return (
       <main className="flex min-h-screen flex-col items-center p-8">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6 text-center">
-          <h2 className="text-2xl font-bold mb-4">Sign in to View Your Votes</h2>
-          <p className="text-gray-600 mb-6">Please sign in to see your voting history.</p>
-          <button
-            onClick={() => signIn("google")}
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded shadow hover:shadow-md transition text-gray-700 font-medium mx-auto"
-          >
-            <Image src="/google-logo.svg" alt="Google logo" width={20} height={20} />
-            <span>Sign in with Google</span>
-          </button>
-        </div>
+        <SignInPrompt message="Please sign in to see your voting history." />
       </main>
     );
   }
@@ -128,85 +134,103 @@ export default function MyVotes() {
         <div className="text-gray-600">You haven&apos;t voted on any places yet.</div>
       ) : (
         <div className="w-full max-w-3xl space-y-4">
-          {votes.map((vote) => (
+          {Object.entries(groupedVotes).map(([place_id, { place_name, place_address, dog, pet }]) => (
             <div
-              key={vote.id}
+              key={place_id}
               className="bg-white rounded-lg shadow-md p-6 transition hover:shadow-lg"
             >
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-xl font-semibold">
                     <a
-                      href={`/?place_id=${encodeURIComponent(vote.place_id)}`}
-                      className="text-blue-700 hover:underline cursor-pointer"
+                      href={`/?place_id=${encodeURIComponent(place_id)}`}
+                      className="text-black-700 hover:underline cursor-pointer"
                     >
-                      {vote.place_name}
+                      {place_name}
                     </a>
                   </h3>
-                  <p className="text-gray-600 mt-1">{vote.place_address}</p>
+                  <p className="text-gray-600 mt-1">{place_address}</p>
                 </div>
-                {editId === vote.id ? (
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={editValue}
-                      onChange={e => setEditValue(e.target.value as "yes" | "no")}
-                      className="border rounded px-2 py-1"
-                      disabled={actionLoading}
-                    >
-                      <option value="yes">YES</option>
-                      <option value="no">NO</option>
-                    </select>
-                    <button
-                      onClick={() => handleEditSave(vote.id)}
-                      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                      disabled={actionLoading}
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditId(null)}
-                      className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
-                      disabled={actionLoading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleEdit(vote)}
-                      className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
-                      disabled={actionLoading}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(vote.id)}
-                      className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200"
-                      disabled={actionLoading}
-                    >
-                      Delete
-                    </button>
+              </div>
+              <div className="mt-4 flex flex-col gap-3">
+                {dog && (
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold text-blue-600">Dog-friendly?</span>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${dog.vote_type === "yes" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{dog.vote_type.toUpperCase()}</span>
+                    <span className="text-gray-400 text-xs ml-1">{new Date(dog.created_at).toLocaleDateString()}</span>
+                    {editId === dog.id ? (
+                      <><select
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value as "yes" | "no")}
+                        className="border rounded px-2 py-1"
+                        disabled={actionLoading}
+                      >
+                        <option value="yes">YES</option>
+                        <option value="no">NO</option>
+                      </select>
+                      <button
+                        onClick={() => handleEditSave(dog.id)}
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                        disabled={actionLoading}
+                      >Save</button>
+                      <button
+                        onClick={() => setEditId(null)}
+                        className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                        disabled={actionLoading}
+                      >Cancel</button></>
+                    ) : (
+                      <><button
+                        onClick={() => handleEdit(dog)}
+                        className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
+                        disabled={actionLoading}
+                      >Edit</button>
+                      <button
+                        onClick={() => handleDelete(dog.id)}
+                        className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200"
+                        disabled={actionLoading}
+                      >Delete</button></>
+                    )}
                   </div>
                 )}
-              </div>
-              
-              <div className="mt-4 flex flex-col gap-1">
-                <div className="flex items-center gap-3">
-                  <span className="font-semibold text-blue-600">
-                    {vote.question_type === "dog" ? "Dog-friendly?" : "Pet-friendly? (excluding dogs)"}
-                  </span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    vote.vote_type === "yes"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}>
-                    {vote.vote_type.toUpperCase()}
-                  </span>
-                </div>
-                <span className="text-gray-400 text-xs ml-1">
-                  {new Date(vote.created_at).toLocaleDateString()}
-                </span>
+                {pet && (
+                  <div className="flex items-center gap-3">
+                    <span className="font-semibold text-blue-600">Pet-friendly? (excluding dogs)</span>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${pet.vote_type === "yes" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>{pet.vote_type.toUpperCase()}</span>
+                    <span className="text-gray-400 text-xs ml-1">{new Date(pet.created_at).toLocaleDateString()}</span>
+                    {editId === pet.id ? (
+                      <><select
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value as "yes" | "no")}
+                        className="border rounded px-2 py-1"
+                        disabled={actionLoading}
+                      >
+                        <option value="yes">YES</option>
+                        <option value="no">NO</option>
+                      </select>
+                      <button
+                        onClick={() => handleEditSave(pet.id)}
+                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                        disabled={actionLoading}
+                      >Save</button>
+                      <button
+                        onClick={() => setEditId(null)}
+                        className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                        disabled={actionLoading}
+                      >Cancel</button></>
+                    ) : (
+                      <><button
+                        onClick={() => handleEdit(pet)}
+                        className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200"
+                        disabled={actionLoading}
+                      >Edit</button>
+                      <button
+                        onClick={() => handleDelete(pet.id)}
+                        className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded hover:bg-red-200"
+                        disabled={actionLoading}
+                      >Delete</button></>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

@@ -35,7 +35,7 @@ export default function NavBar() {
     <nav className="w-full bg-white border-b shadow-sm">
       <div className="max-w-4xl mx-auto px-4 flex items-center justify-between h-16">
         {/* App Name */}
-        <Link href="/" onClick={() => handleNavigation("/")} className="text-xl font-bold text-blue-700">Is It Pet-Friendly?</Link>
+        <Link href="/" onClick={() => handleNavigation("/")} className="text-xl font-bold text-black-700">Is It Pet-Friendly?</Link>
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (

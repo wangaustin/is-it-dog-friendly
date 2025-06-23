@@ -4,6 +4,7 @@ import PlaceSearch from "@/components/PlaceSearch";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import SignInPrompt from "@/components/SignInPrompt";
 
 interface Place {
   id: string;
@@ -236,7 +237,9 @@ export default function HomeContent() {
             </div>
           </div>
           {!session && (
-            <div className="mb-4 text-yellow-700 font-semibold">Please sign in to vote.</div>
+            <div className="mb-4">
+              <SignInPrompt message="Please sign in to vote, edit, or delete your votes." />
+            </div>
           )}
           {/* Dog-friendly question */}
           <div className="mb-6">
