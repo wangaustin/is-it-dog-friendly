@@ -42,7 +42,7 @@ export default function NavBar() {
             <button
               key={item.href}
               onClick={() => handleNavigation(item.href)}
-              className="text-gray-700 hover:text-blue-600 font-medium"
+              className="text-gray-700 font-medium transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-5 inline-block"
             >
               {item.label}
             </button>
@@ -84,7 +84,7 @@ export default function NavBar() {
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href)}
-                className="text-gray-700 hover:text-blue-600 font-medium text-left"
+                className="text-gray-700 font-medium text-left transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-1 inline-block"
               >
                 {item.label}
               </button>

@@ -1,0 +1,15 @@
+{
+  "title": "Is It Pet-Friendly?",
+  "welcome": "Welcome!",
+  "search_placeholder": "Search for a place...",
+  "sign_in_required": "Sign in Required",
+  "sign_in_message": "Please sign in to continue.",
+  "sign_in_with_google": "Sign in with Google",
+  "dog_friendly": "Dog-friendly?",
+  "pet_friendly": "Pet-friendly? (excluding dogs)",
+  "edit": "Edit",
+  "delete": "Delete",
+  "save": "Save",
+  "cancel": "Cancel",
+  "error_loading_suggestions": "Error loading suggestions"
+} 

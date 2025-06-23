@@ -170,12 +170,12 @@ export default function MyVotes() {
                       </select>
                       <button
                         onClick={() => handleEditSave(dog.id)}
-                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                        className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
                         disabled={actionLoading}
                       >Save</button>
                       <button
                         onClick={() => setEditId(null)}
-                        className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                        className="px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
                         disabled={actionLoading}
                       >Cancel</button></>
                     ) : (
@@ -209,12 +209,12 @@ export default function MyVotes() {
                       </select>
                       <button
                         onClick={() => handleEditSave(pet.id)}
-                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                        className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
                         disabled={actionLoading}
                       >Save</button>
                       <button
                         onClick={() => setEditId(null)}
-                        className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
+                        className="px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300"
                         disabled={actionLoading}
                       >Cancel</button></>
                     ) : (

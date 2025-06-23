@@ -1,0 +1,15 @@
+{
+  "title": "这里允许带宠物吗？",
+  "welcome": "欢迎！",
+  "search_placeholder": "搜索地点...",
+  "sign_in_required": "需要登录",
+  "sign_in_message": "请登录以继续。",
+  "sign_in_with_google": "使用 Google 登录",
+  "dog_friendly": "允许带狗吗？",
+  "pet_friendly": "允许带宠物吗？（不包括狗）",
+  "edit": "编辑",
+  "delete": "删除",
+  "save": "保存",
+  "cancel": "取消",
+  "error_loading_suggestions": "加载建议时出错"
+} 
