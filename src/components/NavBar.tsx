@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 // Create a custom event for resetting search

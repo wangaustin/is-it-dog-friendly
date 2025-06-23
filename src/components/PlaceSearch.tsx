@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import useSWR from "swr";
-import { searchResetEvent } from "@/components/NavBar";
 
 interface PlacePrediction {
   placeId: string;
@@ -49,7 +48,7 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
   useEffect(() => {
     window.addEventListener('resetSearch', resetSearch);
     return () => window.removeEventListener('resetSearch', resetSearch);
-  }, []);
+  }, [resetSearch]);
 
   return (
     <div className="relative w-full max-w-md">

@@ -31,9 +31,9 @@ export default function MyVotes() {
       if (!res.ok) throw new Error("Failed to fetch votes");
       const data = await res.json();
       setVotes(data);
-    } catch (err) {
+    } catch {
       setError("Failed to load your votes. Please try again later.");
-      console.error("Error fetching votes:", err);
+      console.error("Error fetching votes");
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,7 @@ export default function MyVotes() {
       if (!res.ok) throw new Error("Failed to update vote");
       setEditId(null);
       await fetchVotes();
-    } catch (err) {
+    } catch {
       alert("Failed to update vote. Please try again.");
     } finally {
       setActionLoading(false);
@@ -82,7 +82,7 @@ export default function MyVotes() {
       });
       if (!res.ok) throw new Error("Failed to delete vote");
       await fetchVotes();
-    } catch (err) {
+    } catch {
       alert("Failed to delete vote. Please try again.");
     } finally {
       setActionLoading(false);

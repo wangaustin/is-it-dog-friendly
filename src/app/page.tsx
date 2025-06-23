@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import PlaceSearch from "@/components/PlaceSearch";
 import { useSession } from "next-auth/react";
-import { searchResetEvent } from "@/components/NavBar";
 import { useSearchParams } from "next/navigation";
 
 interface Place {
@@ -15,7 +14,7 @@ interface Place {
 }
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [place, setPlace] = useState<Place | null>(null);
   const [dogVotes, setDogVotes] = useState<{ yes: number; no: number } | null>(null);
   const [petVotes, setPetVotes] = useState<{ yes: number; no: number } | null>(null);
@@ -148,7 +147,7 @@ export default function Home() {
       if (votesData.userVotes?.pet) setPetEditValue(votesData.userVotes.pet.vote_type);
       // Update userVotes state with the new vote value
       setUserVotes(votesData.userVotes);
-    } catch (err) {
+    } catch {
       alert('Failed to update vote. Please try again.');
     } finally {
       setActionLoading(false);
@@ -172,7 +171,7 @@ export default function Home() {
       setDogVotes(votesData.dog);
       setPetVotes(votesData.pet);
       setUserVotes(votesData.userVotes);
-    } catch (err) {
+    } catch {
       alert('Failed to delete vote. Please try again.');
     } finally {
       setActionLoading(false);
