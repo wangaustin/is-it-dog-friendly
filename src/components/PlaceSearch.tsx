@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useSWR from "swr";
 
 interface PlacePrediction {
@@ -38,11 +38,11 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
     onPlaceSelect(placeDetails);
   };
 
-  const resetSearch = () => {
+  const resetSearch = useCallback(() => {
     setInput("");
     setShowSuggestions(false);
     onReset?.();
-  };
+  }, [onReset]);
 
   // Listen for reset event
   useEffect(() => {

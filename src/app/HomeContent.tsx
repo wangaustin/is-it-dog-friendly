@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PlaceSearch from "@/components/PlaceSearch";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -32,13 +32,13 @@ export default function HomeContent() {
   const searchParams = useSearchParams();
 
   // Reset function to clear all state
-  const resetSearch = () => {
+  const resetSearch = useCallback(() => {
     setPlace(null);
     setDogVotes(null);
     setPetVotes(null);
     setDogVoteError(null);
     setPetVoteError(null);
-  };
+  }, []);
 
   // Listen for reset event
   useEffect(() => {

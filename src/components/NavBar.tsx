@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
 
 // Create a custom event for resetting search
 export const searchResetEvent = new Event('resetSearch');
@@ -47,7 +48,7 @@ export default function NavBar() {
           {status === "loading" ? null : session ? (
             <div className="flex items-center gap-2">
               {session.user?.image && (
-                <img src={session.user.image} alt="avatar" className="w-8 h-8 rounded-full" />
+                <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full" />
               )}
               <span className="text-gray-700">{session.user?.name || session.user?.email}</span>
               <button onClick={() => signOut()} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200">Sign out</button>
@@ -57,7 +58,7 @@ export default function NavBar() {
               onClick={() => signIn("google")}
               className="flex items-center gap-2 px-3 py-1 text-sm bg-white border rounded shadow hover:shadow-md transition text-gray-700 font-medium"
             >
-              <img src="/google-logo.svg" alt="Google logo" width={18} height={18} />
+              <Image src="/google-logo.svg" alt="Google logo" width={18} height={18} />
               Sign in
             </button>
           )}
@@ -89,7 +90,7 @@ export default function NavBar() {
             {status === "loading" ? null : session ? (
               <div className="flex items-center gap-2 mt-2">
                 {session.user?.image && (
-                  <img src={session.user.image} alt="avatar" className="w-8 h-8 rounded-full" />
+                  <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full" />
                 )}
                 <span className="text-gray-700">{session.user?.name || session.user?.email}</span>
                 <button onClick={() => { setMenuOpen(false); signOut(); }} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200">Sign out</button>
@@ -99,7 +100,7 @@ export default function NavBar() {
                 onClick={() => { setMenuOpen(false); signIn("google"); }}
                 className="flex items-center gap-2 px-3 py-1 text-sm bg-white border rounded shadow hover:shadow-md transition text-gray-700 font-medium mt-2"
               >
-                <img src="/google-logo.svg" alt="Google logo" width={18} height={18} />
+                <Image src="/google-logo.svg" alt="Google logo" width={18} height={18} />
                 Sign in
               </button>
             )}
