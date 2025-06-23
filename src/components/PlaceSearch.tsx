@@ -74,7 +74,7 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
       <div className="flex gap-2">
         <input
           type="text"
-          className="border p-2 w-full rounded"
+          className="border border-gray-300 bg-white text-gray-900 p-3 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
           placeholder="Search for a place..."
           value={input}
           onChange={(e) => {
@@ -87,7 +87,7 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
         {input && (
           <button
             onClick={resetSearch}
-            className="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200 text-gray-600"
+            className="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors"
             aria-label="Clear search"
           >
             ✕
@@ -95,11 +95,11 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
         )}
       </div>
       {showSuggestions && data && data.suggestions && (
-        <ul className="absolute z-10 bg-white border w-full mt-1 rounded shadow">
+        <ul className="absolute z-10 bg-white border border-gray-300 w-full mt-1 rounded-lg shadow-xl">
           {data.suggestions.map((suggestion: { placePrediction: PlacePrediction }) => (
             <li
               key={suggestion.placePrediction.placeId}
-              className="p-2 hover:bg-gray-100 cursor-pointer"
+              className="p-3 hover:bg-gray-100 cursor-pointer text-gray-900 border-b border-gray-200 last:border-b-0 transition-colors"
               onClick={() => handleSelect(suggestion.placePrediction)}
             >
               {suggestion.placePrediction.text.text}

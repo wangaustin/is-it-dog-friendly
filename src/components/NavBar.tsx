@@ -35,7 +35,7 @@ export default function NavBar() {
     <nav className="w-full bg-white border-b shadow-sm">
       <div className="max-w-4xl mx-auto px-4 flex items-center justify-between h-16">
         {/* App Name */}
-        <Link href="/" onClick={() => handleNavigation("/")} className="text-xl font-bold text-black-700">Is It Pet-Friendly?</Link>
+        <Link href="/" onClick={() => handleNavigation("/")} className="text-xl font-bold text-gray-900">Is It Pet-Friendly?</Link>
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6">
           {menuItems.map((item) => (
@@ -53,7 +53,7 @@ export default function NavBar() {
                 <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full" />
               )}
               <span className="text-gray-700">{session.user?.name || session.user?.email}</span>
-              <button onClick={() => signOut()} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200">Sign out</button>
+              <button onClick={() => signOut()} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200 text-gray-700">Sign out</button>
             </div>
           ) : (
             <button
@@ -71,7 +71,7 @@ export default function NavBar() {
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Toggle menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -95,7 +95,7 @@ export default function NavBar() {
                   <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full" />
                 )}
                 <span className="text-gray-700">{session.user?.name || session.user?.email}</span>
-                <button onClick={() => { setMenuOpen(false); signOut(); }} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200">Sign out</button>
+                <button onClick={() => { setMenuOpen(false); signOut(); }} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200 text-gray-700">Sign out</button>
               </div>
             ) : (
               <button

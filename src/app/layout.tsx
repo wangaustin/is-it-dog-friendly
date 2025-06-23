@@ -3,6 +3,9 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import NavBar from "@/components/NavBar";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Is It Pet-Friendly?",
@@ -15,11 +18,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen flex flex-col">
+    <html lang="en" className={inter.className}>
+      <body className="min-h-screen flex flex-col bg-white">
         <SessionProviderWrapper>
           <NavBar />
-          <main className="flex-1 flex flex-col items-center p-8 w-full">
+          <main className="flex-1 flex flex-col items-center px-8 pb-8 w-full">
             {children}
             <Analytics />
           </main>

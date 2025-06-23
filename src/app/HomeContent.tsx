@@ -190,17 +190,35 @@ export default function HomeContent() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold mb-8">Is It Pet-Friendly?</h1>
-      <PlaceSearch onPlaceSelect={handlePlaceSelect} onReset={resetSearch} />
+      {/* Hero Section: Only show when no place is selected */}
+      {!searchParams.get("place_id") && !place && (
+        <section className="relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center py-20 px-8 bg-gradient-to-br from-blue-50 via-white to-blue-100 shadow-2xl mb-10 rounded-2xl">
+          <span className="text-4xl md:text-6xl mb-6">🐾</span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-gray-900 tracking-tight">Is It Pet-Friendly?</h1>
+          <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl leading-relaxed">Find and share pet-friendly places in your city!</p>
+          <div className="w-full max-w-md mx-auto">
+            <PlaceSearch onPlaceSelect={handlePlaceSelect} onReset={resetSearch} />
+          </div>
+        </section>
+      )}
       {/* Show description only if there is no place_id in the URL */}
       {!searchParams.get("place_id") && !place && (
-        <div className="max-w-xl mx-auto mt-8 text-center text-gray-600 text-base bg-white/80 rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-2">Welcome!</h2>
-          <p>
-            Search for a place using the bar above to see if it&apos;s dog- or pet-friendly, view community votes, and add your own vote!<br/>
-            <br/>
-            Sign in to vote, edit, or delete your votes. Click on a place to see details, vote counts, and more information like address, phone, and place type labels.
-          </p>
+        <div className="relative w-full max-w-4xl mx-auto mt-8 text-center bg-white border border-gray-200 rounded-xl shadow-xl p-10">
+          <div className="flex items-center justify-center mb-6">
+            <span className="text-4xl mr-3">👋</span>
+            <h2 className="text-3xl font-bold text-gray-900">Welcome!</h2>
+          </div>
+          <div className="space-y-6 text-gray-700 text-lg leading-relaxed max-w-3xl mx-auto">
+            <p>
+              Search for a place using the bar above to see if it&apos;s <span className="font-semibold text-blue-600">dog- or pet-friendly</span>, view community votes, and add your own vote!
+            </p>
+          </div>
+        </div>
+      )}
+      {/* Show sign-in prompt if user is not signed in and no place is selected */}
+      {!searchParams.get("place_id") && !place && !session && (
+        <div className="w-full max-w-2xl mx-auto mt-8 flex justify-center">
+          <SignInPrompt message="Sign in to start voting and contributing to the community!" />
         </div>
       )}
       {/* Show loading spinner if place_id exists but place is not loaded or mismatched */}
@@ -211,28 +229,28 @@ export default function HomeContent() {
         </div>
       )}
       {place && (
-        <div className="mt-8 text-center">
+        <div className="w-full max-w-5xl mx-auto mt-8 px-2 sm:px-8">
           <div className="flex flex-col items-center mb-6">
-            <div className="bg-white shadow-md rounded-lg px-6 py-4 w-full max-w-md">
-              <div className="text-2xl font-bold mb-1 text-center">{place.displayName.text}</div>
-              <div className="flex items-center justify-center text-gray-500 text-sm mt-1">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-xl px-4 sm:px-6 py-4 sm:py-6 w-full sm:max-w-2xl">
+              <div className="text-2xl sm:text-3xl font-bold mb-3 text-center text-gray-900">{place.displayName.text}</div>
+              <div className="flex items-center justify-center text-gray-600 text-sm sm:text-base mt-2">
                 <Image src="/address.svg" alt="Address" width={16} height={16} className="mr-1" />
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formattedAddress)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:underline hover:text-blue-700 cursor-pointer"
+                  className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
                   title="Open in Maps"
                 >
                   {place.formattedAddress}
                 </a>
               </div>
               {place.nationalPhoneNumber && (
-                <div className="flex items-center justify-center text-gray-700 text-sm mt-1">
+                <div className="flex items-center justify-center text-gray-600 text-sm sm:text-base mt-2">
                   <Image src="/phone.svg" alt="Phone" width={16} height={16} className="mr-1" />
                   <a
                     href={`tel:${place.nationalPhoneNumber.replace(/[^\d+]/g, "")}`}
-                    className="hover:underline hover:text-blue-700 cursor-pointer"
+                    className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
                     title="Call this place"
                   >
                     {place.nationalPhoneNumber}
@@ -240,9 +258,9 @@ export default function HomeContent() {
                 </div>
               )}
               {place.types && place.types.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-2 mt-2">
+                <div className="flex flex-wrap justify-center gap-2 mt-4">
                   {place.types?.map((type) => (
-                    <span key={type} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium uppercase tracking-wide">
+                    <span key={type} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium uppercase tracking-wide border border-blue-200">
                       {type.replace(/_/g, ' ')}
                     </span>
                   ))}
@@ -251,28 +269,28 @@ export default function HomeContent() {
             </div>
           </div>
           {!session && (
-            <div className="mb-4">
+            <div className="mb-6">
               <SignInPrompt message="Please sign in to vote, edit, or delete your votes." />
             </div>
           )}
           {/* Dog-friendly question */}
-          <div className="mb-6">
-            <div className="text-xl font-bold mb-4 bg-gray-50 py-3 px-4 rounded-lg shadow-sm">
+          <div className="mb-8">
+            <div className="text-xl sm:text-2xl font-bold mb-6 bg-blue-50 py-3 sm:py-4 px-4 sm:px-6 rounded-xl border border-blue-200">
               Is it dog-friendly?
             </div>
             {session && userVotes.dog && !dogEditMode ? (
-              <div className="flex flex-col items-center gap-2 mb-2">
-                <div className={`font-semibold ${userVotes.dog.vote_type === 'yes' ? 'text-green-700' : 'text-red-700'}`}>You have already voted: {userVotes.dog.vote_type.toUpperCase()}</div>
-                <div className="flex gap-2">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <div className={`font-medium text-sm ${userVotes.dog.vote_type === 'yes' ? 'text-green-600' : 'text-red-600'}`}>You voted: {userVotes.dog.vote_type.toUpperCase()}</div>
+                <div className="flex gap-3">
                   <button
                     onClick={() => setDogEditMode(true)}
-                    className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 text-sm"
+                    className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 text-sm font-medium transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteVote('dog', userVotes.dog!.id)}
-                    className="px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 text-sm"
+                    className="px-4 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 text-sm font-medium transition-colors"
                     disabled={actionLoading}
                   >
                     Delete
@@ -280,34 +298,34 @@ export default function HomeContent() {
                 </div>
               </div>
             ) : session && userVotes.dog && dogEditMode ? (
-              <div className="flex flex-col items-center gap-2 mb-2">
-                <div className="flex gap-2">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <div className="flex gap-3">
                   <button
                     onClick={() => setDogEditValue('yes')}
-                    className={`px-4 py-2 rounded ${dogEditValue === 'yes' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    className={`px-6 py-3 rounded-lg font-medium transition-colors ${dogEditValue === 'yes' ? 'bg-green-500 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                     disabled={actionLoading}
                   >
                     Yes
                   </button>
                   <button
                     onClick={() => setDogEditValue('no')}
-                    className={`px-4 py-2 rounded ${dogEditValue === 'no' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    className={`px-6 py-3 rounded-lg font-medium transition-colors ${dogEditValue === 'no' ? 'bg-red-500 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                     disabled={actionLoading}
                   >
                     No
                   </button>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <button
                     onClick={() => handleEditVote('dog', userVotes.dog!.id, dogEditValue)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm disabled:opacity-50"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors disabled:opacity-50"
                     disabled={actionLoading}
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setDogEditMode(false)}
-                    className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm"
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-medium transition-colors"
                     disabled={actionLoading}
                   >
                     Cancel
@@ -315,18 +333,18 @@ export default function HomeContent() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-2 mb-2">
-                <div className="flex justify-center gap-4 mb-2">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <div className="flex justify-center gap-4">
                   <button
                     onClick={() => session && handleVote("yes", "dog")}
-                    className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+                    className="px-8 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors disabled:opacity-50 shadow-md"
                     disabled={dogVoting || !session}
                   >
                     Yes
                   </button>
                   <button
                     onClick={() => session && handleVote("no", "dog")}
-                    className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                    className="px-8 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors disabled:opacity-50 shadow-md"
                     disabled={dogVoting || !session}
                   >
                     No
@@ -335,35 +353,44 @@ export default function HomeContent() {
               </div>
             )}
             {dogVoteError && (
-              <div className="mt-2 text-yellow-600 font-semibold">{dogVoteError}</div>
+              <div className="mt-3 text-yellow-600 font-semibold text-center">{dogVoteError}</div>
             )}
             {loadingVotes ? (
-              <div className="mt-4 text-gray-500">Loading votes...</div>
+              <div className="mt-6 text-gray-500 text-center">Loading votes...</div>
             ) : dogVotes && (
-              <div className="mt-4">
-                <div className="text-lg">Yes: <span className="font-bold">{dogVotes.yes}</span></div>
-                <div className="text-lg">No: <span className="font-bold">{dogVotes.no}</span></div>
+              <div className="mt-6 bg-white border border-gray-200 rounded-xl shadow-lg p-4 sm:p-6 max-w-md mx-auto">
+                <div className="text-center text-lg mb-2">Community Votes</div>
+                <div className="flex justify-center gap-8">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">{dogVotes.yes}</div>
+                    <div className="text-sm text-gray-600">Yes</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">{dogVotes.no}</div>
+                    <div className="text-sm text-gray-600">No</div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
           {/* Pet-friendly (excluding dogs) question */}
           <div>
-            <div className="text-xl font-bold mb-4 bg-gray-50 py-3 px-4 rounded-lg shadow-sm">
+            <div className="text-xl sm:text-2xl font-bold mb-6 bg-pink-50 py-3 sm:py-4 px-4 sm:px-6 rounded-xl border border-pink-200">
               Is it pet-friendly (excluding dogs)?
             </div>
             {session && userVotes.pet && !petEditMode ? (
-              <div className="flex flex-col items-center gap-2 mb-2">
-                <div className={`font-semibold ${userVotes.pet.vote_type === 'yes' ? 'text-green-700' : 'text-red-700'}`}>You have already voted: {userVotes.pet.vote_type.toUpperCase()}</div>
-                <div className="flex gap-2">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <div className={`font-medium text-sm ${userVotes.pet.vote_type === 'yes' ? 'text-green-600' : 'text-red-600'}`}>You voted: {userVotes.pet.vote_type.toUpperCase()}</div>
+                <div className="flex gap-3">
                   <button
                     onClick={() => setPetEditMode(true)}
-                    className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200 text-sm"
+                    className="px-4 py-2 bg-yellow-100 text-yellow-800 rounded-lg hover:bg-yellow-200 text-sm font-medium transition-colors"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteVote('pet', userVotes.pet!.id)}
-                    className="px-3 py-1 bg-red-100 text-red-800 rounded hover:bg-red-200 text-sm"
+                    className="px-4 py-2 bg-red-100 text-red-800 rounded-lg hover:bg-red-200 text-sm font-medium transition-colors"
                     disabled={actionLoading}
                   >
                     Delete
@@ -371,34 +398,34 @@ export default function HomeContent() {
                 </div>
               </div>
             ) : session && userVotes.pet && petEditMode ? (
-              <div className="flex flex-col items-center gap-2 mb-2">
-                <div className="flex gap-2">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <div className="flex gap-3">
                   <button
                     onClick={() => setPetEditValue('yes')}
-                    className={`px-4 py-2 rounded ${petEditValue === 'yes' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    className={`px-6 py-3 rounded-lg font-medium transition-colors ${petEditValue === 'yes' ? 'bg-green-500 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                     disabled={actionLoading}
                   >
                     Yes
                   </button>
                   <button
                     onClick={() => setPetEditValue('no')}
-                    className={`px-4 py-2 rounded ${petEditValue === 'no' ? 'bg-red-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    className={`px-6 py-3 rounded-lg font-medium transition-colors ${petEditValue === 'no' ? 'bg-red-500 text-white shadow-md' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                     disabled={actionLoading}
                   >
                     No
                   </button>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   <button
                     onClick={() => handleEditVote('pet', userVotes.pet!.id, petEditValue)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm disabled:opacity-50"
+                    className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 text-sm font-medium transition-colors disabled:opacity-50"
                     disabled={actionLoading}
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setPetEditMode(false)}
-                    className="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 text-sm"
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm font-medium transition-colors"
                     disabled={actionLoading}
                   >
                     Cancel
@@ -406,18 +433,18 @@ export default function HomeContent() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-2 mb-2">
-                <div className="flex justify-center gap-4 mb-2">
+              <div className="flex flex-col items-center gap-3 mb-4">
+                <div className="flex justify-center gap-4">
                   <button
                     onClick={() => session && handleVote("yes", "pet")}
-                    className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+                    className="px-8 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-600 transition-colors disabled:opacity-50 shadow-md"
                     disabled={petVoting || !session}
                   >
                     Yes
                   </button>
                   <button
                     onClick={() => session && handleVote("no", "pet")}
-                    className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                    className="px-8 py-3 bg-red-500 text-white rounded-lg font-medium hover:bg-red-600 transition-colors disabled:opacity-50 shadow-md"
                     disabled={petVoting || !session}
                   >
                     No
@@ -426,14 +453,23 @@ export default function HomeContent() {
               </div>
             )}
             {petVoteError && (
-              <div className="mt-2 text-yellow-600 font-semibold">{petVoteError}</div>
+              <div className="mt-3 text-yellow-600 font-semibold text-center">{petVoteError}</div>
             )}
             {loadingVotes ? (
-              <div className="mt-4 text-gray-500">Loading votes...</div>
+              <div className="mt-6 text-gray-500 text-center">Loading votes...</div>
             ) : petVotes && (
-              <div className="mt-4">
-                <div className="text-lg">Yes: <span className="font-bold">{petVotes.yes}</span></div>
-                <div className="text-lg">No: <span className="font-bold">{petVotes.no}</span></div>
+              <div className="mt-6 bg-white border border-gray-200 rounded-xl shadow-lg p-4 sm:p-6 max-w-md mx-auto">
+                <div className="text-center text-lg mb-2">Community Votes</div>
+                <div className="flex justify-center gap-8">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-600">{petVotes.yes}</div>
+                    <div className="text-sm text-gray-600">Yes</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-red-600">{petVotes.no}</div>
+                    <div className="text-sm text-gray-600">No</div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
