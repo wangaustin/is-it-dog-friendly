@@ -3,8 +3,8 @@ import "./globals.css";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 export const metadata: Metadata = {
-  title: "Is It Dog-Friendly?",
-  description: "Vote on whether a place is dog-friendly.",
+  title: "Is It Pet-Friendly?",
+  description: "Vote on whether a place is pet-friendly.",
 };
 
 export default function RootLayout({

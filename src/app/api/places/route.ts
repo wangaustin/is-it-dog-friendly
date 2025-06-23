@@ -19,6 +19,7 @@ export async function GET(request: Request) {
     headers: {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": apiKey!,
+      "X-Goog-FieldMask": "suggestions.placePrediction.placeId,suggestions.placePrediction.text.text"
     },
     body: JSON.stringify({
       input,
@@ -29,11 +30,11 @@ export async function GET(request: Request) {
     const error = await res.json();
     console.error("Google Places API error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch suggestions" },
+      { error: "Failed to fetch suggestions", suggestions: [] },
       { status: 500 }
     );
   }
 
   const data = await res.json();
-  return NextResponse.json(data);
+  return NextResponse.json({ suggestions: data.suggestions || [] });
 } 
