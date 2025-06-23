@@ -2,6 +2,7 @@
 
 import { useSession, signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface Vote {
   id: number;
@@ -107,7 +108,7 @@ export default function MyVotes() {
             onClick={() => signIn("google")}
             className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded shadow hover:shadow-md transition text-gray-700 font-medium mx-auto"
           >
-            <img src="/google-logo.svg" alt="Google logo" width={20} height={20} />
+            <Image src="/google-logo.svg" alt="Google logo" width={20} height={20} />
             <span>Sign in with Google</span>
           </button>
         </div>
