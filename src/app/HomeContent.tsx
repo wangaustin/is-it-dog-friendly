@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import PlaceSearch from "@/components/PlaceSearch";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 interface Place {
   id: string;
@@ -10,6 +11,8 @@ interface Place {
     text: string;
   };
   formattedAddress: string;
+  types?: string[];
+  nationalPhoneNumber?: string;
 }
 
 export default function HomeContent() {
@@ -187,11 +190,29 @@ export default function HomeContent() {
             <div className="bg-white shadow-md rounded-lg px-6 py-4 w-full max-w-md">
               <div className="text-2xl font-bold mb-1 text-center">{place.displayName.text}</div>
               <div className="flex items-center justify-center text-gray-500 text-sm mt-1">
-                <svg className="w-4 h-4 mr-1 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 10c-4.418 0-8-4.03-8-9a8 8 0 1 1 16 0c0 4.97-3.582 9-8 9z"/></svg>
+                <Image src="/address.svg" alt="Address" width={16} height={16} className="mr-1" />
                 {place.formattedAddress}
               </div>
+              {place.nationalPhoneNumber && (
+                <div className="flex items-center justify-center text-gray-700 text-sm mt-1">
+                  <Image src="/phone.svg" alt="Phone" width={16} height={16} className="mr-1" />
+                  <span>{place.nationalPhoneNumber}</span>
+                </div>
+              )}
+              {place.types && place.types.length > 0 && (
+                <div className="flex flex-wrap justify-center gap-2 mt-2">
+                  {place.types?.map((type) => (
+                    <span key={type} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium uppercase tracking-wide">
+                      {type.replace(/_/g, ' ')}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
+          {!session && (
+            <div className="mb-4 text-yellow-700 font-semibold">Please sign in to vote.</div>
+          )}
           {/* Dog-friendly question */}
           <div className="mb-6">
             <div className="text-xl font-bold mb-4 bg-gray-50 py-3 px-4 rounded-lg shadow-sm">
@@ -251,22 +272,24 @@ export default function HomeContent() {
                   </button>
                 </div>
               </div>
-            ) : session && (
-              <div className="flex justify-center gap-4 mb-2">
-                <button
-                  onClick={() => handleVote("yes", "dog")}
-                  className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
-                  disabled={dogVoting}
-                >
-                  Yes
-                </button>
-                <button
-                  onClick={() => handleVote("no", "dog")}
-                  className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
-                  disabled={dogVoting}
-                >
-                  No
-                </button>
+            ) : (
+              <div className="flex flex-col items-center gap-2 mb-2">
+                <div className="flex justify-center gap-4 mb-2">
+                  <button
+                    onClick={() => session && handleVote("yes", "dog")}
+                    className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+                    disabled={dogVoting || !session}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() => session && handleVote("no", "dog")}
+                    className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                    disabled={dogVoting || !session}
+                  >
+                    No
+                  </button>
+                </div>
               </div>
             )}
             {dogVoteError && (
@@ -340,22 +363,24 @@ export default function HomeContent() {
                   </button>
                 </div>
               </div>
-            ) : session && (
-              <div className="flex justify-center gap-4 mb-2">
-                <button
-                  onClick={() => handleVote("yes", "pet")}
-                  className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
-                  disabled={petVoting}
-                >
-                  Yes
-                </button>
-                <button
-                  onClick={() => handleVote("no", "pet")}
-                  className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
-                  disabled={petVoting}
-                >
-                  No
-                </button>
+            ) : (
+              <div className="flex flex-col items-center gap-2 mb-2">
+                <div className="flex justify-center gap-4 mb-2">
+                  <button
+                    onClick={() => session && handleVote("yes", "pet")}
+                    className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+                    disabled={petVoting || !session}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() => session && handleVote("no", "pet")}
+                    className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                    disabled={petVoting || !session}
+                  >
+                    No
+                  </button>
+                </div>
               </div>
             )}
             {petVoteError && (
