@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 // Create a custom event for resetting search
@@ -17,13 +17,15 @@ export default function NavBar() {
   const { data: session, status } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
 
   const handleNavigation = (href: string) => {
     setMenuOpen(false);
-    if (href === "/" && pathname === "/") {
-      // If we're already on the home page, dispatch the reset event
-      window.dispatchEvent(searchResetEvent);
+    if (href === "/") {
+      router.push("/"); // Always clear query params
+      // Use a timeout to ensure navigation happens before reset
+      setTimeout(() => {
+        window.dispatchEvent(searchResetEvent);
+      }, 0);
     } else {
       router.push(href);
     }

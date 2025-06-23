@@ -15,10 +15,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen flex flex-col">
         <SessionProviderWrapper>
           <NavBar />
-          {children}
+          <main className="flex-1 flex flex-col items-center p-8 w-full">
+            {children}
+          </main>
+          <footer className="w-full text-center text-gray-400 text-xs py-6 mt-auto border-t bg-white">
+            @ Austin Wang
+          </footer>
         </SessionProviderWrapper>
       </body>
     </html>

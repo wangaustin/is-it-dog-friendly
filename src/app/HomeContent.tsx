@@ -58,7 +58,7 @@ export default function HomeContent() {
         if (res.ok) {
           const placeDetails = await res.json();
           setPlace(placeDetails);
-        }
+        } 
       })();
     }
   }, [searchParams]);
@@ -180,10 +180,33 @@ export default function HomeContent() {
     }
   };
 
+  // Custom place select handler to prevent description flash
+  const handlePlaceSelect = (placeDetails: Place) => {
+    setPlace(placeDetails);
+  };
+
   return (
     <>
       <h1 className="text-4xl font-bold mb-8">Is It Pet-Friendly?</h1>
-      <PlaceSearch onPlaceSelect={setPlace} onReset={resetSearch} />
+      <PlaceSearch onPlaceSelect={handlePlaceSelect} onReset={resetSearch} />
+      {/* Show description only if there is no place_id in the URL */}
+      {!searchParams.get("place_id") && !place && (
+        <div className="max-w-xl mx-auto mt-8 text-center text-gray-600 text-base bg-white/80 rounded-lg shadow p-6">
+          <h2 className="text-xl font-semibold mb-2">Welcome!</h2>
+          <p>
+            Search for a place using the bar above to see if it&apos;s dog- or pet-friendly, view community votes, and add your own vote!<br/>
+            <br/>
+            Sign in to vote, edit, or delete your votes. Click on a place to see details, vote counts, and more information like address, phone, and place type labels.
+          </p>
+        </div>
+      )}
+      {/* Show loading spinner if place_id exists but place is not loaded or mismatched */}
+      {searchParams.get("place_id") && (!place || place.id !== searchParams.get("place_id")) && (
+        <div className="flex justify-center items-center mt-12 text-gray-400">
+          <svg className="animate-spin h-6 w-6 mr-2 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+          Loading place details...
+        </div>
+      )}
       {place && (
         <div className="mt-8 text-center">
           <div className="flex flex-col items-center mb-6">
