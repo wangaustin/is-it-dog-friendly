@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PlaceSearch from "@/components/PlaceSearch";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
 interface Place {
@@ -33,6 +33,7 @@ export default function HomeContent() {
   const [userVotes, setUserVotes] = useState<{ dog: { vote_type: 'yes' | 'no'; id: number } | null; pet: { vote_type: 'yes' | 'no'; id: number } | null }>({ dog: null, pet: null });
 
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Reset function to clear all state
   const resetSearch = useCallback(() => {
@@ -182,7 +183,8 @@ export default function HomeContent() {
 
   // Custom place select handler to prevent description flash
   const handlePlaceSelect = (placeDetails: Place) => {
-    setPlace(placeDetails);
+    // Only update the URL with the new place_id
+    router.push(`/?place_id=${encodeURIComponent(placeDetails.id)}`);
   };
 
   return (
