@@ -24,16 +24,13 @@ export async function GET(req: NextRequest) {
   if (!place_id) {
     return NextResponse.json({ error: "Missing place_id" }, { status: 400 });
   }
-  const { rows } = await sql`
-    SELECT vote_type, COUNT(*) as count
-    FROM votes
-    WHERE place_id = ${place_id}
-    GROUP BY vote_type
-  `;
-  const result = { yes: 0, no: 0 };
-  for (const row of rows as any[]) {
-    if (row.vote_type === "yes") result.yes = Number(row.count);
-    if (row.vote_type === "no") result.no = Number(row.count);
+  const { rows } = await sql`SELECT vote_type, COUNT(*) as count FROM votes WHERE place_id = ${place_id} GROUP BY vote_type`;
+  type VoteRow = { vote_type: string; count: string };
+  let yes = 0;
+  let no = 0;
+  for (const row of rows as VoteRow[]) {
+    if (row.vote_type === "yes") yes = Number(row.count);
+    if (row.vote_type === "no") no = Number(row.count);
   }
-  return NextResponse.json(result);
+  return NextResponse.json({ yes, no });
 } 

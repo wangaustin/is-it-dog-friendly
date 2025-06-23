@@ -1,10 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 
+interface PlacePrediction {
+  placeId: string;
+  text: { text: string };
+}
+
+interface PlaceDetails {
+  id: string;
+  displayName: { text: string };
+  formattedAddress: string;
+}
+
 interface PlaceSearchProps {
-  onPlaceSelect: (place: any) => void;
+  onPlaceSelect: (place: PlaceDetails) => void;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -17,42 +28,43 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
     fetcher
   );
 
-  const handleSelect = async (placePrediction: any) => {
+  const handleSelect = async (placePrediction: PlacePrediction) => {
     setInput(placePrediction.text.text);
     setShowSuggestions(false);
-    
     const placeId = placePrediction.placeId;
     const res = await fetch(`/api/places/details?placeId=${placeId}`);
-    const placeDetails = await res.json();
+    const placeDetails: PlaceDetails = await res.json();
     onPlaceSelect(placeDetails);
   };
-  
+
   return (
     <div className="relative w-full max-w-md">
       <input
         type="text"
+        className="border p-2 w-full rounded"
+        placeholder="Search for a place..."
         value={input}
         onChange={(e) => {
           setInput(e.target.value);
           setShowSuggestions(true);
         }}
-        placeholder="Search for a place"
-        className="w-full p-2 border border-gray-300 rounded-md"
+        onFocus={() => setShowSuggestions(true)}
+        autoComplete="off"
       />
       {showSuggestions && data && data.suggestions && (
-        <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
-          {data.suggestions.map((suggestion: any) => (
+        <ul className="absolute z-10 bg-white border w-full mt-1 rounded shadow">
+          {data.suggestions.map((suggestion: { placePrediction: PlacePrediction }) => (
             <li
               key={suggestion.placePrediction.placeId}
+              className="p-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleSelect(suggestion.placePrediction)}
-              className="p-2 cursor-pointer hover:bg-gray-100"
             >
               {suggestion.placePrediction.text.text}
             </li>
           ))}
         </ul>
       )}
-      {error && <p>Error fetching suggestions</p>}
+      {error && <div className="text-red-500 mt-2">Error loading suggestions</div>}
     </div>
   );
 };
