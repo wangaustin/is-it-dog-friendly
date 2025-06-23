@@ -84,7 +84,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       <h1 className="text-4xl font-bold mb-8">Is It Pet-Friendly?</h1>
-      <div className="mb-4 w-full flex justify-end">
+      <div className="mb-4 w-full flex justify-center">
         {status === "loading" ? (
           <span>Loading...</span>
         ) : session ? (
@@ -93,8 +93,14 @@ export default function Home() {
             <button onClick={() => signOut()} className="text-blue-600 underline">Sign out</button>
           </>
         ) : (
-          <button onClick={() => signIn("google")}
-            className="text-blue-600 underline">Sign in with Google</button>
+          <button
+            onClick={() => signIn("google")}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded shadow hover:shadow-md transition text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+            style={{ minWidth: 200 }}
+          >
+            <img src="/google-logo.svg" alt="Google logo" width={20} height={20} className="inline-block" />
+            <span>Sign in with Google</span>
+          </button>
         )}
       </div>
       <PlaceSearch onPlaceSelect={setPlace} />
