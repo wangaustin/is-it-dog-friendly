@@ -124,7 +124,7 @@ export default function MyVotes() {
       ) : error ? (
         <div className="text-red-600">{error}</div>
       ) : votes.length === 0 ? (
-        <div className="text-gray-600">You haven't voted on any places yet.</div>
+        <div className="text-gray-600">You haven&apos;t voted on any places yet.</div>
       ) : (
         <div className="w-full max-w-3xl space-y-4">
           {votes.map((vote) => (
