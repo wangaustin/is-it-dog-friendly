@@ -102,74 +102,75 @@ export default function Home() {
         <div className="mt-8 text-center">
           <h2 className="text-2xl font-bold">{place.displayName.text}</h2>
           <p className="mb-4">{place.formattedAddress}</p>
-          {session ? (
-            <>
-              {/* Dog-friendly question */}
-              <div className="mb-6">
-                <div className="font-semibold mb-2">Is it <span className="text-blue-700">dog-friendly</span>?</div>
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => handleVote("yes", "dog")}
-                    className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
-                    disabled={dogVoting}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    onClick={() => handleVote("no", "dog")}
-                    className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
-                    disabled={dogVoting}
-                  >
-                    No
-                  </button>
-                </div>
-                {dogVoteError && (
-                  <div className="mt-2 text-yellow-600 font-semibold">{dogVoteError}</div>
-                )}
-                {loadingVotes ? (
-                  <div className="mt-4 text-gray-500">Loading votes...</div>
-                ) : dogVotes && (
-                  <div className="mt-4">
-                    <div className="text-lg">Yes: <span className="font-bold">{dogVotes.yes}</span></div>
-                    <div className="text-lg">No: <span className="font-bold">{dogVotes.no}</span></div>
-                  </div>
-                )}
-              </div>
-              {/* Pet-friendly (excluding dogs) question */}
-              <div>
-                <div className="font-semibold mb-2">Is it <span className="text-blue-700">pet-friendly (excluding dogs)</span>?</div>
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={() => handleVote("yes", "pet")}
-                    className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
-                    disabled={petVoting}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    onClick={() => handleVote("no", "pet")}
-                    className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
-                    disabled={petVoting}
-                  >
-                    No
-                  </button>
-                </div>
-                {petVoteError && (
-                  <div className="mt-2 text-yellow-600 font-semibold">{petVoteError}</div>
-                )}
-                {loadingVotes ? (
-                  <div className="mt-4 text-gray-500">Loading votes...</div>
-                ) : petVotes && (
-                  <div className="mt-4">
-                    <div className="text-lg">Yes: <span className="font-bold">{petVotes.yes}</span></div>
-                    <div className="text-lg">No: <span className="font-bold">{petVotes.no}</span></div>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <div className="mt-2 text-yellow-600 font-semibold">Sign in to vote!</div>
+          {!session && (
+            <div className="mb-4 text-yellow-600 font-semibold">Sign in to vote!</div>
           )}
+          {/* Dog-friendly question */}
+          <div className="mb-6">
+            <div className="font-semibold mb-2">Is it <span className="text-blue-700">dog-friendly</span>?</div>
+            {session && (
+              <div className="flex justify-center gap-4 mb-2">
+                <button
+                  onClick={() => handleVote("yes", "dog")}
+                  className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+                  disabled={dogVoting}
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => handleVote("no", "dog")}
+                  className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                  disabled={dogVoting}
+                >
+                  No
+                </button>
+              </div>
+            )}
+            {dogVoteError && (
+              <div className="mt-2 text-yellow-600 font-semibold">{dogVoteError}</div>
+            )}
+            {loadingVotes ? (
+              <div className="mt-4 text-gray-500">Loading votes...</div>
+            ) : dogVotes && (
+              <div className="mt-4">
+                <div className="text-lg">Yes: <span className="font-bold">{dogVotes.yes}</span></div>
+                <div className="text-lg">No: <span className="font-bold">{dogVotes.no}</span></div>
+              </div>
+            )}
+          </div>
+          {/* Pet-friendly (excluding dogs) question */}
+          <div>
+            <div className="font-semibold mb-2">Is it <span className="text-blue-700">pet-friendly (excluding dogs)</span>?</div>
+            {session && (
+              <div className="flex justify-center gap-4 mb-2">
+                <button
+                  onClick={() => handleVote("yes", "pet")}
+                  className="px-4 py-2 bg-green-500 text-white rounded disabled:opacity-50"
+                  disabled={petVoting}
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => handleVote("no", "pet")}
+                  className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+                  disabled={petVoting}
+                >
+                  No
+                </button>
+              </div>
+            )}
+            {petVoteError && (
+              <div className="mt-2 text-yellow-600 font-semibold">{petVoteError}</div>
+            )}
+            {loadingVotes ? (
+              <div className="mt-4 text-gray-500">Loading votes...</div>
+            ) : petVotes && (
+              <div className="mt-4">
+                <div className="text-lg">Yes: <span className="font-bold">{petVotes.yes}</span></div>
+                <div className="text-lg">No: <span className="font-bold">{petVotes.no}</span></div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </main>
