@@ -175,7 +175,7 @@ export default function MyVotes() {
                         </select>
                         <button
                           onClick={() => handleEditSave(dog.id)}
-                          className="ml-2 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Save"
                         >
@@ -183,7 +183,7 @@ export default function MyVotes() {
                         </button>
                         <button
                           onClick={() => setEditId(null)}
-                          className="ml-2 p-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Cancel"
                         >
@@ -194,7 +194,7 @@ export default function MyVotes() {
                       <>
                         <button
                           onClick={() => handleEdit(dog)}
-                          className="ml-2 p-2 rounded-full bg-yellow-100 text-yellow-800 hover:bg-yellow-200 focus:ring-2 focus:ring-yellow-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-yellow-100 text-yellow-800 hover:bg-yellow-200 focus:ring-2 focus:ring-yellow-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Edit"
                         >
@@ -202,7 +202,7 @@ export default function MyVotes() {
                         </button>
                         <button
                           onClick={() => handleDelete(dog.id)}
-                          className="ml-2 p-2 rounded-full bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-red-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-red-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Delete"
                         >
@@ -235,7 +235,7 @@ export default function MyVotes() {
                         </select>
                         <button
                           onClick={() => handleEditSave(pet.id)}
-                          className="ml-2 p-2 rounded-full bg-pink-600 text-white hover:bg-pink-700 focus:ring-2 focus:ring-pink-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-pink-600 text-white hover:bg-pink-700 focus:ring-2 focus:ring-pink-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Save"
                         >
@@ -243,7 +243,7 @@ export default function MyVotes() {
                         </button>
                         <button
                           onClick={() => setEditId(null)}
-                          className="ml-2 p-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 focus:ring-2 focus:ring-gray-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Cancel"
                         >
@@ -254,7 +254,7 @@ export default function MyVotes() {
                       <>
                         <button
                           onClick={() => handleEdit(pet)}
-                          className="ml-2 p-2 rounded-full bg-yellow-100 text-yellow-800 hover:bg-yellow-200 focus:ring-2 focus:ring-yellow-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-yellow-100 text-yellow-800 hover:bg-yellow-200 focus:ring-2 focus:ring-yellow-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Edit"
                         >
@@ -262,7 +262,7 @@ export default function MyVotes() {
                         </button>
                         <button
                           onClick={() => handleDelete(pet.id)}
-                          className="ml-2 p-2 rounded-full bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-red-400 transition-colors"
+                          className="ml-2 p-2 rounded-full bg-red-100 text-red-800 hover:bg-red-200 focus:ring-2 focus:ring-red-400 transition-colors cursor-pointer"
                           disabled={actionLoading}
                           title="Delete"
                         >

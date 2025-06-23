@@ -6,8 +6,10 @@ export default function SignInPrompt({ message = "Sign in to continue" }: { mess
   return (
     <div className="max-w-md w-full bg-white border border-gray-200 rounded-xl shadow-xl p-8 text-center">
       <div className="flex items-center justify-center mb-4">
-        <span className="text-3xl mr-3">🔐</span>
-        <h2 className="text-2xl font-bold text-gray-900">Sign in Required</h2>
+        <div className="flex items-center gap-2">
+          <span className="text-4xl">🔐</span>
+          <h2 className="text-3xl font-bold text-gray-900">Sign in Required</h2>
+        </div>
       </div>
       <p className="text-gray-700 mb-8 text-lg leading-relaxed">{message}</p>
       <button

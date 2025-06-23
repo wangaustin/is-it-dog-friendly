@@ -32,42 +32,43 @@ export default function NavBar() {
   };
 
   return (
-    <nav className="w-full bg-white border-b shadow-sm">
-      <div className="max-w-4xl mx-auto px-4 flex items-center justify-between h-16">
+    <nav className="w-full bg-white border-b border-gray-200 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-white/95">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
         {/* App Name */}
-        <Link href="/" onClick={() => handleNavigation("/")} className="text-xl font-bold text-gray-900">Is It Pet-Friendly?</Link>
+        <Link href="/" onClick={() => handleNavigation("/")} className="text-xl sm:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">Is It Pet-Friendly?</Link>
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-8">
           {menuItems.map((item) => (
             <button
               key={item.href}
               onClick={() => handleNavigation(item.href)}
-              className="text-gray-700 font-medium transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-5 inline-block"
+              className="text-gray-700 font-medium transition-all duration-200 hover:text-blue-600 hover:bg-blue-50 rounded-lg px-4 py-2 relative group cursor-pointer"
             >
-              {item.label}
+              <span className="relative z-10">{item.label}</span>
+              <span className="absolute inset-0 bg-blue-100 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200"></span>
             </button>
           ))}
           {status === "loading" ? null : session ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-2 border border-gray-200">
               {session.user?.image && (
-                <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full" />
+                <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm" />
               )}
-              <span className="text-gray-700">{session.user?.name || session.user?.email}</span>
-              <button onClick={() => signOut()} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200 text-gray-700">Sign out</button>
+              <span className="text-gray-700 font-medium text-sm">{session.user?.name || session.user?.email}</span>
+              <button onClick={() => signOut()} className="px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium cursor-pointer">Sign out</button>
             </div>
           ) : (
             <button
               onClick={() => signIn("google")}
-              className="flex items-center gap-2 px-3 py-1 text-sm bg-white border rounded shadow hover:shadow-md transition text-gray-700 font-medium"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200 text-gray-700 font-medium cursor-pointer"
             >
-              <Image src="/google-logo.svg" alt="Google logo" width={18} height={18} />
+              <Image src="/google-logo.svg" alt="Google logo" width={20} height={20} />
               Sign in
             </button>
           )}
         </div>
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden flex items-center p-2 focus:outline-none"
+          className="md:hidden flex items-center p-2 rounded-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="Toggle menu"
         >
@@ -78,31 +79,31 @@ export default function NavBar() {
       </div>
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t shadow-sm px-4 pb-4">
-          <div className="flex flex-col gap-4 mt-2">
+        <div className="md:hidden bg-white border-t border-gray-200 shadow-lg px-4 py-4">
+          <div className="flex flex-col gap-3">
             {menuItems.map((item) => (
               <button
                 key={item.href}
                 onClick={() => handleNavigation(item.href)}
-                className="text-gray-700 font-medium text-left transition-colors duration-200 hover:bg-blue-100 hover:text-blue-700 rounded px-3 py-1 inline-block"
+                className="text-gray-700 font-medium text-left transition-all duration-200 hover:bg-blue-50 hover:text-blue-600 rounded-lg px-4 py-3 w-full text-left cursor-pointer"
               >
                 {item.label}
               </button>
             ))}
             {status === "loading" ? null : session ? (
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200 mt-2">
                 {session.user?.image && (
-                  <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full" />
+                  <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm" />
                 )}
-                <span className="text-gray-700">{session.user?.name || session.user?.email}</span>
-                <button onClick={() => { setMenuOpen(false); signOut(); }} className="ml-2 px-3 py-1 text-sm bg-gray-100 border rounded hover:bg-gray-200 text-gray-700">Sign out</button>
+                <span className="text-gray-700 font-medium text-sm flex-1">{session.user?.name || session.user?.email}</span>
+                <button onClick={() => { setMenuOpen(false); signOut(); }} className="px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium cursor-pointer">Sign out</button>
               </div>
             ) : (
               <button
                 onClick={() => { setMenuOpen(false); signIn("google"); }}
-                className="flex items-center gap-2 px-3 py-1 text-sm bg-white border rounded shadow hover:shadow-md transition text-gray-700 font-medium mt-2"
+                className="flex items-center justify-center gap-3 px-4 py-3 text-sm bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200 text-gray-700 font-medium mt-2 w-full cursor-pointer"
               >
-                <Image src="/google-logo.svg" alt="Google logo" width={18} height={18} />
+                <Image src="/google-logo.svg" alt="Google logo" width={20} height={20} />
                 Sign in
               </button>
             )}

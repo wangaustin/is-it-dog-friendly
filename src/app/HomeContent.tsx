@@ -193,7 +193,7 @@ export default function HomeContent() {
       {/* Hero Section: Only show when no place is selected */}
       {!searchParams.get("place_id") && !place && (
         <section className="relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center py-20 px-8 bg-gradient-to-br from-blue-50 via-white to-blue-100 shadow-2xl mb-10 rounded-2xl">
-          <span className="text-4xl md:text-6xl mb-6">🐾</span>
+          <span className="text-5xl md:text-6xl mb-6">🐾</span>
           <h1 className="text-4xl md:text-6xl font-bold mb-4 text-gray-900 tracking-tight">Is It Pet-Friendly?</h1>
           <p className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl leading-relaxed">Find and share pet-friendly places in your city!</p>
           <div className="w-full max-w-md mx-auto">
@@ -239,7 +239,7 @@ export default function HomeContent() {
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formattedAddress)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
+                  className="hover:underline hover:text-blue-600 cursor-pointer transition-colors text-center"
                   title="Open in Maps"
                 >
                   {place.formattedAddress}
