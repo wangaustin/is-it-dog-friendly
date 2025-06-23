@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import useSWR from "swr";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface PlacePrediction {
   placeId: string;
@@ -28,6 +29,9 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
     input.length > 2 ? `/api/places?input=${input}` : null,
     fetcher
   );
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = async (placePrediction: PlacePrediction) => {
     setInput(placePrediction.text.text);
@@ -41,8 +45,11 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
   const resetSearch = useCallback(() => {
     setInput("");
     setShowSuggestions(false);
+    if (searchParams.get("place_id")) {
+      router.push("/");
+    }
     onReset?.();
-  }, [onReset]);
+  }, [onReset, router, searchParams]);
 
   // Listen for reset event
   useEffect(() => {
@@ -50,8 +57,20 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => 
     return () => window.removeEventListener('resetSearch', resetSearch);
   }, [resetSearch]);
 
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    if (!showSuggestions) return;
+    function handleClick(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showSuggestions]);
+
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full max-w-md" ref={containerRef}>
       <div className="flex gap-2">
         <input
           type="text"

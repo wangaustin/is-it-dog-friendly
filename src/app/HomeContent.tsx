@@ -217,12 +217,26 @@ export default function HomeContent() {
               <div className="text-2xl font-bold mb-1 text-center">{place.displayName.text}</div>
               <div className="flex items-center justify-center text-gray-500 text-sm mt-1">
                 <Image src="/address.svg" alt="Address" width={16} height={16} className="mr-1" />
-                {place.formattedAddress}
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.formattedAddress)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline hover:text-blue-700 cursor-pointer"
+                  title="Open in Maps"
+                >
+                  {place.formattedAddress}
+                </a>
               </div>
               {place.nationalPhoneNumber && (
                 <div className="flex items-center justify-center text-gray-700 text-sm mt-1">
                   <Image src="/phone.svg" alt="Phone" width={16} height={16} className="mr-1" />
-                  <span>{place.nationalPhoneNumber}</span>
+                  <a
+                    href={`tel:${place.nationalPhoneNumber.replace(/[^\d+]/g, "")}`}
+                    className="hover:underline hover:text-blue-700 cursor-pointer"
+                    title="Call this place"
+                  >
+                    {place.nationalPhoneNumber}
+                  </a>
                 </div>
               )}
               {place.types && place.types.length > 0 && (
