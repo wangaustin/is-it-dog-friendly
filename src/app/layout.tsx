@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import "./globals.css";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 import NavBar from "@/components/NavBar";
@@ -20,6 +21,7 @@ export default function RootLayout({
           <NavBar />
           <main className="flex-1 flex flex-col items-center p-8 w-full">
             {children}
+            <Analytics />
           </main>
           <footer className="w-full text-center text-gray-400 text-xs py-6 mt-auto border-t bg-white">
             @ Austin Wang
