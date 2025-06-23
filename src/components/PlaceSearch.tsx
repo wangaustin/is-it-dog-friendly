@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR from "swr";
+import { searchResetEvent } from "@/components/NavBar";
 
 interface PlacePrediction {
   placeId: string;
@@ -16,11 +17,12 @@ interface PlaceDetails {
 
 interface PlaceSearchProps {
   onPlaceSelect: (place: PlaceDetails) => void;
+  onReset?: () => void;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
+const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect, onReset }) => {
   const [input, setInput] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { data, error } = useSWR(
@@ -37,20 +39,43 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
     onPlaceSelect(placeDetails);
   };
 
+  const resetSearch = () => {
+    setInput("");
+    setShowSuggestions(false);
+    onReset?.();
+  };
+
+  // Listen for reset event
+  useEffect(() => {
+    window.addEventListener('resetSearch', resetSearch);
+    return () => window.removeEventListener('resetSearch', resetSearch);
+  }, []);
+
   return (
     <div className="relative w-full max-w-md">
-      <input
-        type="text"
-        className="border p-2 w-full rounded"
-        placeholder="Search for a place..."
-        value={input}
-        onChange={(e) => {
-          setInput(e.target.value);
-          setShowSuggestions(true);
-        }}
-        onFocus={() => setShowSuggestions(true)}
-        autoComplete="off"
-      />
+      <div className="flex gap-2">
+        <input
+          type="text"
+          className="border p-2 w-full rounded"
+          placeholder="Search for a place..."
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value);
+            setShowSuggestions(true);
+          }}
+          onFocus={() => setShowSuggestions(true)}
+          autoComplete="off"
+        />
+        {input && (
+          <button
+            onClick={resetSearch}
+            className="px-3 py-2 bg-gray-100 rounded hover:bg-gray-200 text-gray-600"
+            aria-label="Clear search"
+          >
+            ✕
+          </button>
+        )}
+      </div>
       {showSuggestions && data && data.suggestions && (
         <ul className="absolute z-10 bg-white border w-full mt-1 rounded shadow">
           {data.suggestions.map((suggestion: { placePrediction: PlacePrediction }) => (

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
+import NavBar from "@/components/NavBar";
 
 export const metadata: Metadata = {
   title: "Is It Pet-Friendly?",
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SessionProviderWrapper>{children}</SessionProviderWrapper>
+        <SessionProviderWrapper>
+          <NavBar />
+          {children}
+        </SessionProviderWrapper>
       </body>
     </html>
   );

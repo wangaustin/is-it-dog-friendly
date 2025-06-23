@@ -31,8 +31,9 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true });
 }
 
-// GET: Fetch vote counts for a place
+// GET: Fetch vote counts for a place, and the current user's vote if authenticated
 export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
   const { searchParams } = new URL(req.url);
   const place_id = searchParams.get("place_id");
   if (!place_id) {
@@ -41,15 +42,29 @@ export async function GET(req: NextRequest) {
   // Get counts for both questions
   const { rows } = await sql`SELECT question_type, vote_type, COUNT(*) as count FROM votes WHERE place_id = ${place_id} GROUP BY question_type, vote_type`;
   type VoteRow = { question_type: string; vote_type: string; count: string };
-  const result = {
+  type UserVote = { vote_type: string; id: number } | null;
+  const result: {
+    dog: { yes: number; no: number };
+    pet: { yes: number; no: number };
+    userVotes: { dog: UserVote; pet: UserVote };
+  } = {
     dog: { yes: 0, no: 0 },
     pet: { yes: 0, no: 0 },
+    userVotes: { dog: null, pet: null },
   };
   for (const row of rows as VoteRow[]) {
     if (row.question_type === "dog" && row.vote_type === "yes") result.dog.yes = Number(row.count);
     if (row.question_type === "dog" && row.vote_type === "no") result.dog.no = Number(row.count);
     if (row.question_type === "pet" && row.vote_type === "yes") result.pet.yes = Number(row.count);
     if (row.question_type === "pet" && row.vote_type === "no") result.pet.no = Number(row.count);
+  }
+  // If authenticated, get the user's vote for this place
+  if (session?.user?.email) {
+    const { rows: userRows } = await sql`SELECT question_type, vote_type, id FROM votes WHERE place_id = ${place_id} AND user_email = ${session.user.email}`;
+    for (const row of userRows) {
+      if (row.question_type === "dog") result.userVotes.dog = { vote_type: row.vote_type, id: row.id };
+      if (row.question_type === "pet") result.userVotes.pet = { vote_type: row.vote_type, id: row.id };
+    }
   }
   return NextResponse.json(result);
 } 
