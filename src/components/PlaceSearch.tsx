@@ -32,7 +32,7 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
     setInput(placePrediction.text.text);
     setShowSuggestions(false);
     const placeId = placePrediction.placeId;
-    const res = await fetch(`/api/places/details?placeId=${placeId}`);
+    const res = await fetch(`/api/places/${placeId}`);
     const placeDetails: PlaceDetails = await res.json();
     onPlaceSelect(placeDetails);
   };

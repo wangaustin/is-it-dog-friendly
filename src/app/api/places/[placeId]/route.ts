@@ -1,14 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const placeId = searchParams.get("placeId");
-
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { placeId: string } }
+) {
+  const placeId = params.placeId;
   if (!placeId) {
-    return NextResponse.json(
-      { error: "Place ID is required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Place ID is required" }, { status: 400 });
   }
 
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
