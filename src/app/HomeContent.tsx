@@ -276,7 +276,7 @@ export default function HomeContent() {
           {/* Dog-friendly question */}
           <div className="mb-8">
             <div className="text-xl sm:text-2xl font-bold mb-6 bg-blue-50 py-3 sm:py-4 px-4 sm:px-6 rounded-xl border border-blue-200">
-              Is it dog-friendly?
+              🐶 Is it dog-friendly?
             </div>
             {session && userVotes.dog && !dogEditMode ? (
               <div className="flex flex-col items-center gap-3 mb-4">
@@ -376,7 +376,7 @@ export default function HomeContent() {
           {/* Pet-friendly (excluding dogs) question */}
           <div>
             <div className="text-xl sm:text-2xl font-bold mb-6 bg-pink-50 py-3 sm:py-4 px-4 sm:px-6 rounded-xl border border-pink-200">
-              Is it pet-friendly (excluding dogs)?
+              🐾 Is it pet-friendly (excluding dogs)?
             </div>
             {session && userVotes.pet && !petEditMode ? (
               <div className="flex flex-col items-center gap-3 mb-4">
