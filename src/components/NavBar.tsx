@@ -11,6 +11,7 @@ export const searchResetEvent = new Event('resetSearch');
 const menuItems = [
   { label: "Search", href: "/" },
   { label: "My Votes", href: "/my-votes" },
+  { label: "My Comments", href: "/my-comments" },
 ];
 
 export default function NavBar() {
@@ -50,10 +51,12 @@ export default function NavBar() {
           ))}
           {status === "loading" ? null : session ? (
             <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-2 border border-gray-200">
-              {session.user?.image && (
-                <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm" />
-              )}
-              <span className="text-gray-700 font-medium text-sm">{session.user?.name || session.user?.email}</span>
+              <Link href="/account" className="flex items-center gap-3 hover:bg-gray-100 rounded-lg p-1 transition-colors cursor-pointer">
+                {session.user?.image && (
+                  <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm" />
+                )}
+                <span className="text-gray-700 font-medium text-sm">{session.user?.name || session.user?.email}</span>
+              </Link>
               <button onClick={() => signOut()} className="px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium cursor-pointer">Sign out</button>
             </div>
           ) : (
@@ -92,10 +95,12 @@ export default function NavBar() {
             ))}
             {status === "loading" ? null : session ? (
               <div className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200 mt-2">
-                {session.user?.image && (
-                  <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm" />
-                )}
-                <span className="text-gray-700 font-medium text-sm flex-1">{session.user?.name || session.user?.email}</span>
+                <Link href="/account" className="flex items-center gap-3 hover:bg-gray-100 rounded-lg p-1 transition-colors cursor-pointer flex-1">
+                  {session.user?.image && (
+                    <Image src={session.user.image} alt="avatar" width={32} height={32} className="w-8 h-8 rounded-full ring-2 ring-white shadow-sm" />
+                  )}
+                  <span className="text-gray-700 font-medium text-sm">{session.user?.name || session.user?.email}</span>
+                </Link>
                 <button onClick={() => { setMenuOpen(false); signOut(); }} className="px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium cursor-pointer">Sign out</button>
               </div>
             ) : (

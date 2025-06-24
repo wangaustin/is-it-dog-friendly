@@ -13,14 +13,15 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   const googleUrl = `https://places.googleapis.com/v1/places/${placeId}`;
 
-  // Request outdoorSeating field (and other basic fields)
+  // Request websiteUri field (and other basic fields)
   const fieldMask = [
     "id",
     "displayName",
     "formattedAddress",
     "types",
     "nationalPhoneNumber",
-    "outdoorSeating"
+    "outdoorSeating",
+    "websiteUri"
   ].join(",");
 
   const res = await fetch(googleUrl, {

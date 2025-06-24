@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import SignInPrompt from "@/components/SignInPrompt";
+import Comments from "@/components/Comments";
 
 interface Place {
   id: string;
@@ -15,6 +16,7 @@ interface Place {
   types?: string[];
   nationalPhoneNumber?: string;
   outdoorSeating?: boolean;
+  websiteUri?: string;
 }
 
 export default function HomeContent() {
@@ -283,6 +285,20 @@ export default function HomeContent() {
                   </a>
                 </div>
               )}
+              {place.websiteUri && (
+                <div className="flex items-center justify-center text-gray-600 text-sm sm:text-base mt-2">
+                  <Image src="/website.svg" alt="Website" width={16} height={16} className="mr-1" />
+                  <a
+                    href={place.websiteUri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline hover:text-blue-600 cursor-pointer transition-colors"
+                    title="Visit website"
+                  >
+                    {new URL(place.websiteUri).hostname.replace('www.', '')}
+                  </a>
+                </div>
+              )}
               {place.types && place.types.length > 0 && (
                 <div className="flex flex-wrap justify-center gap-2 mt-4">
                   {place.types?.map((type) => (
@@ -498,6 +514,15 @@ export default function HomeContent() {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Comments Section */}
+          <div className="mt-12 w-full sm:max-w-2xl mx-auto">
+            <Comments 
+              placeId={place.id}
+              placeName={place.displayName.text}
+              placeAddress={place.formattedAddress}
+            />
           </div>
         </div>
       )}
