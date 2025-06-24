@@ -13,12 +13,22 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   const googleUrl = `https://places.googleapis.com/v1/places/${placeId}`;
 
+  // Request outdoorSeating field (and other basic fields)
+  const fieldMask = [
+    "id",
+    "displayName",
+    "formattedAddress",
+    "types",
+    "nationalPhoneNumber",
+    "outdoorSeating"
+  ].join(",");
+
   const res = await fetch(googleUrl, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": apiKey!,
-      "X-Goog-FieldMask": "id,displayName,formattedAddress,types,nationalPhoneNumber"
+      "X-Goog-FieldMask": fieldMask
     },
   });
 
@@ -32,5 +42,26 @@ export async function GET(request: NextRequest) {
   }
 
   const data = await res.json();
-  return NextResponse.json(data);
+
+  // Scan reviews and editorialSummary for 'dog friendly' or 'pet friendly'
+  let isDogFriendlyByGoogle = false;
+  const keywords = ["dog friendly", "pet friendly", "dogs allowed", "pets allowed"];
+
+  if (data.reviews && Array.isArray(data.reviews)) {
+    for (const review of data.reviews) {
+      const text = (review.text?.text || "").toLowerCase();
+      if (keywords.some((kw) => text.includes(kw))) {
+        isDogFriendlyByGoogle = true;
+        break;
+      }
+    }
+  }
+  if (!isDogFriendlyByGoogle && data.editorialSummary?.text) {
+    const summary = data.editorialSummary.text.toLowerCase();
+    if (keywords.some((kw) => summary.includes(kw))) {
+      isDogFriendlyByGoogle = true;
+    }
+  }
+
+  return NextResponse.json({ ...data, isDogFriendlyByGoogle });
 } 

@@ -14,6 +14,7 @@ interface Place {
   formattedAddress: string;
   types?: string[];
   nationalPhoneNumber?: string;
+  outdoorSeating?: boolean;
 }
 
 export default function HomeContent() {
@@ -233,6 +234,31 @@ export default function HomeContent() {
           <div className="flex flex-col items-center mb-6">
             <div className="bg-white border border-gray-200 rounded-2xl shadow-xl px-4 sm:px-6 py-4 sm:py-6 w-full sm:max-w-2xl">
               <div className="text-2xl sm:text-3xl font-bold mb-3 text-center text-gray-900">{place.displayName.text}</div>
+              {/* Outdoor Seating Badge (only for restaurant, bar, or food) */}
+              {Array.isArray(place.types) && place.types.some(type => ["restaurant", "bar", "food"].includes(type)) && (
+                place.outdoorSeating === true ? (
+                  <div className="flex justify-center mb-2">
+                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold border border-green-200 shadow-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      Has Outdoor Seating
+                    </span>
+                  </div>
+                ) : place.outdoorSeating === false ? (
+                  <div className="flex justify-center mb-2">
+                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold border border-red-200 shadow-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                      No Outdoor Seating
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex justify-center mb-2">
+                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-semibold border border-yellow-200 shadow-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01" /></svg>
+                      Outdoor Seating Unknown
+                    </span>
+                  </div>
+                )
+              )}
               <div className="flex items-center justify-center text-gray-600 text-sm sm:text-base mt-2">
                 <Image src="/address.svg" alt="Address" width={16} height={16} className="mr-1" />
                 <a
